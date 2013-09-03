@@ -49,6 +49,7 @@
 
 #ifdef	NDEBUG
 
+#undef assert
 # define assert(expr)		(__ASSERT_VOID_CAST (0))
 
 /* void assert_perror (int errnum);

@@ -31,6 +31,16 @@
 #ifndef __MMX__
 # error "MMX instruction set not enabled"
 #else
+
+#include <mm_malloc.h>
+
+#if defined(__clang__) && defined(WITH_SYNTAX_CHECK)
+/* Workaround for "clang -fsyntax-only" happens to use this header, but may
+ * choke on something not supported
+ */
+#define __artificial__   pure
+#endif
+
 /* The Intel API is flexible enough that we must allow aliasing with other
    vector types, and their scalar components.  */
 typedef int __m64 __attribute__ ((__vector_size__ (8), __may_alias__));

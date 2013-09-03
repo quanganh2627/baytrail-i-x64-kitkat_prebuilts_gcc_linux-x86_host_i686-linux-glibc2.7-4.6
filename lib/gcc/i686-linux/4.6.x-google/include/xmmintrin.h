@@ -45,6 +45,67 @@ typedef float __m128 __attribute__ ((__vector_size__ (16), __may_alias__));
 /* Internal data types for implementing the intrinsics.  */
 typedef float __v4sf __attribute__ ((__vector_size__ (16)));
 
+#if defined(__clang__) && defined(WITH_SYNTAX_CHECK)
+/* Workaround for "clang -fsyntax-only" happens to use this header, but may
+ * choke on something not supported in clang
+ */
+int __builtin_ia32_cvtss2si (__v4sf);
+int __builtin_ia32_cvttss2si (__v4sf);
+__m128 __builtin_ia32_addps (__v4sf, __v4sf);
+__m128 __builtin_ia32_addss (__v4sf, __v4sf);
+__m128 __builtin_ia32_addss (__v4sf, __v4sf);
+__m128 __builtin_ia32_addss (__v4sf, __v4sf);
+__m128 __builtin_ia32_andnps (__m128, __m128);
+__m128 __builtin_ia32_andps (__m128, __m128);
+__m128 __builtin_ia32_cmpeqps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpeqss (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpgeps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpgtps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpleps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpless (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpltps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpltss (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpneqps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpneqss (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpngeps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpngtps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpnleps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpnless (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpnltps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpnltss (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpordps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpordss (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpunordps (__v4sf, __v4sf);
+__m128 __builtin_ia32_cmpunordss (__v4sf, __v4sf);
+__m128 __builtin_ia32_cvtsi2ss (__v4sf, int);
+__m128 __builtin_ia32_divps (__v4sf, __v4sf);
+__m128 __builtin_ia32_divss (__v4sf, __v4sf);
+__m128 __builtin_ia32_movss (__v4sf, __v4sf);
+__m128 __builtin_ia32_mulps (__v4sf, __v4sf);
+__m128 __builtin_ia32_mulps (__v4sf, __v4sf);
+__m128 __builtin_ia32_mulss (__v4sf, __v4sf);
+__m128 __builtin_ia32_mulss (__v4sf, __v4sf);
+__m128 __builtin_ia32_orps (__m128, __m128);
+__m128 __builtin_ia32_subps (__v4sf, __v4sf);
+__m128 __builtin_ia32_subss (__v4sf, __v4sf);
+__m128 __builtin_ia32_subss (__v4sf, __v4sf);
+__m128 __builtin_ia32_xorps (__m128, __m128);
+__m128 __builtin_ia32_loadhps (__v4sf, const __v2sf *);
+__m128 __builtin_ia32_loadlps (__v4sf, const __v2sf *);
+__m128 __builtin_ia32_movhlps (__v4sf, __v4sf);
+__m128 __builtin_ia32_movlhps (__v4sf, __v4sf);
+__m128 __builtin_ia32_shufps (__v4sf, __v4sf, int const);
+__m128 __builtin_ia32_unpckhps (__v4sf, __v4sf);
+__m128 __builtin_ia32_unpcklps (__v4sf, __v4sf);
+__m128 __builtin_ia32_loadups (float const *);
+__m64 __builtin_ia32_vec_set_v4hi (__v4hi, int const, int const);
+float __builtin_ia32_vec_ext_v4sf (__v4sf, const int);
+int __builtin_ia32_vec_ext_v4hi (__v4hi, const int);
+long long __builtin_ia32_cvtss2si64 (__v4sf);
+long long __builtin_ia32_cvttss2si64 (__v4sf);
+__m128 __builtin_ia32_cvtsi642ss (__v4sf, long long);
+#endif
+
 /* Create a selector for use with the SHUFPS instruction.  */
 #define _MM_SHUFFLE(fp3,fp2,fp1,fp0) \
  (((fp3) << 6) | ((fp2) << 4) | ((fp1) << 2) | (fp0))
@@ -749,7 +810,11 @@ _mm_loadh_pi (__m128 __A, __m64 const *__P)
 extern __inline void __attribute__((__gnu_inline__, __always_inline__, __artificial__))
 _mm_storeh_pi (__m64 *__P, __m128 __A)
 {
+#if defined(__clang__)
+  __builtin_ia32_storehps ((__v2si *)__P, __A);
+#else
   __builtin_ia32_storehps ((__v2sf *)__P, (__v4sf)__A);
+#endif
 }
 
 /* Moves the upper two values of B into the lower two values of A.  */
@@ -778,7 +843,11 @@ _mm_loadl_pi (__m128 __A, __m64 const *__P)
 extern __inline void __attribute__((__gnu_inline__, __always_inline__, __artificial__))
 _mm_storel_pi (__m64 *__P, __m128 __A)
 {
+#if defined(__clang__)
+  __builtin_ia32_storelps ((__v2si *)__P, __A);
+#else
   __builtin_ia32_storelps ((__v2sf *)__P, (__v4sf)__A);
+#endif
 }
 
 /* Creates a 4-bit mask from the most significant bits of the SPFP values.  */
@@ -1109,7 +1178,7 @@ _m_pmulhuw (__m64 __A, __m64 __B)
 
 /* Return a combination of the four 16-bit values in A.  The selector
    must be an immediate.  */
-#ifdef __OPTIMIZE__
+#if defined(__OPTIMIZE__) && !defined(__clang__)
 extern __inline __m64 __attribute__((__gnu_inline__, __always_inline__, __artificial__))
 _mm_shuffle_pi16 (__m64 __A, int const __N)
 {
@@ -1186,7 +1255,7 @@ _m_psadbw (__m64 __A, __m64 __B)
 
 /* Loads one cache line from address P to a location "closer" to the
    processor.  The selector I specifies the type of prefetch operation.  */
-#ifdef __OPTIMIZE__
+#if defined(__OPTIMIZE__) && !defined(__clang__)
 extern __inline void __attribute__((__gnu_inline__, __always_inline__, __artificial__))
 _mm_prefetch (const void *__P, enum _mm_hint __I)
 {
@@ -1201,7 +1270,13 @@ _mm_prefetch (const void *__P, enum _mm_hint __I)
 extern __inline void __attribute__((__gnu_inline__, __always_inline__, __artificial__))
 _mm_stream_pi (__m64 *__P, __m64 __A)
 {
+#if defined(__clang__)
+  /* Note that __m64 in gcc is defined as "int" instead of "long long", and fail clang. */
+  typedef long long __m64_clang __attribute__((__vector_size__(8)));
+  __builtin_ia32_movntq ((__m64_clang *)__P, __A);
+#else
   __builtin_ia32_movntq ((unsigned long long *)__P, (unsigned long long)__A);
+#endif
 }
 
 /* Likewise.  The address must be 16-byte aligned.  */

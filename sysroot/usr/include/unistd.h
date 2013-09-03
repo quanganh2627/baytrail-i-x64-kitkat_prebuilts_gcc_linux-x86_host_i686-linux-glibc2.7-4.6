@@ -1051,6 +1051,7 @@ extern int lockf64 (int __fd, int __cmd, __off64_t __len) __wur;
 /* Evaluate EXPRESSION, and repeat as long as it returns -1 with `errno'
    set to EINTR.  */
 
+#undef TEMP_FAILURE_RETRY
 # define TEMP_FAILURE_RETRY(expression) \
   (__extension__							      \
     ({ long int __result;						      \

@@ -51,7 +51,7 @@
 #ifdef __USE_MISC
 # define MAP_FILE	0
 # define MAP_ANONYMOUS	0x20		/* Don't use a file.  */
-# define MAP_ANON	MAP_ANONYMOUS
+# define MAP_ANON	0x20
 # define MAP_32BIT	0x40		/* Only give out 32-bit addresses.  */
 #endif
 

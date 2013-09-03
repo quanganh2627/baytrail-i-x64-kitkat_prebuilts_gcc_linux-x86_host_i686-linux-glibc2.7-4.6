@@ -130,12 +130,13 @@ extern int dir_notify_enable;
 /*
  * Superblock flags that can be altered by MS_REMOUNT
  */
+#undef MS_RMT_MASK
 #define MS_RMT_MASK	(MS_RDONLY|MS_SYNCHRONOUS|MS_MANDLOCK)
 
 /*
  * Old magic mount flag and mask
  */
-#define MS_MGC_VAL 0xC0ED0000
+#define MS_MGC_VAL 0xc0ed0000
 #define MS_MGC_MSK 0xffff0000
 
 /* Inode flags - they have nothing to superblock flags now */

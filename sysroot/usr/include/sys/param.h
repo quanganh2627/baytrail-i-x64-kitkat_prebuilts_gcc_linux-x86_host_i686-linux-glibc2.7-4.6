@@ -61,7 +61,9 @@
 #define powerof2(x)	((((x) - 1) & (x)) == 0)
 
 /* Macros for min/max.  */
+#undef MIN
 #define	MIN(a,b) (((a)<(b))?(a):(b))
+#undef MAX
 #define	MAX(a,b) (((a)>(b))?(a):(b))
 
 

@@ -25,8 +25,9 @@
 #include <features.h>
 #include <sys/ioctl.h>
 
-#define BLOCK_SIZE	1024
+
 #define BLOCK_SIZE_BITS	10
+#define BLOCK_SIZE (1<<BLOCK_SIZE_BITS)
 
 
 /* These are the fs-independent mount-flags: up to 16 flags are
@@ -34,31 +35,18 @@
 enum
 {
   MS_RDONLY = 1,		/* Mount read-only.  */
-#define MS_RDONLY	MS_RDONLY
   MS_NOSUID = 2,		/* Ignore suid and sgid bits.  */
-#define MS_NOSUID	MS_NOSUID
   MS_NODEV = 4,			/* Disallow access to device special files.  */
-#define MS_NODEV	MS_NODEV
   MS_NOEXEC = 8,		/* Disallow program execution.  */
-#define MS_NOEXEC	MS_NOEXEC
   MS_SYNCHRONOUS = 16,		/* Writes are synced at once.  */
-#define MS_SYNCHRONOUS	MS_SYNCHRONOUS
   MS_REMOUNT = 32,		/* Alter flags of a mounted FS.  */
-#define MS_REMOUNT	MS_REMOUNT
   MS_MANDLOCK = 64,		/* Allow mandatory locks on an FS.  */
-#define MS_MANDLOCK	MS_MANDLOCK
   S_WRITE = 128,		/* Write on file/directory/symlink.  */
-#define S_WRITE		S_WRITE
   S_APPEND = 256,		/* Append-only file.  */
-#define S_APPEND	S_APPEND
   S_IMMUTABLE = 512,		/* Immutable file.  */
-#define S_IMMUTABLE	S_IMMUTABLE
   MS_NOATIME = 1024,		/* Do not update access times.  */
-#define MS_NOATIME	MS_NOATIME
   MS_NODIRATIME = 2048,		/* Do not update directory access times.  */
-#define MS_NODIRATIME	MS_NODIRATIME
   MS_BIND = 4096,		/* Bind directory at different place.  */
-#define MS_BIND		MS_BIND
 };
 
 /* Flags that can be altered by MS_REMOUNT  */
@@ -76,21 +64,21 @@ enum
    is probably as bad and I don't want to create yet another include
    file.  */
 
-#define BLKROSET   _IO(0x12, 93) /* Set device read-only (0 = read-write).  */
-#define BLKROGET   _IO(0x12, 94) /* Get read-only status (0 = read_write).  */
-#define BLKRRPART  _IO(0x12, 95) /* Re-read partition table.  */
-#define BLKGETSIZE _IO(0x12, 96) /* Return device size.  */
-#define BLKFLSBUF  _IO(0x12, 97) /* Flush buffer cache.  */
-#define BLKRASET   _IO(0x12, 98) /* Set read ahead for block device.  */
-#define BLKRAGET   _IO(0x12, 99) /* Get current read ahead setting.  */
-#define BLKFRASET  _IO(0x12,100) /* Set filesystem read-ahead.  */
-#define BLKFRAGET  _IO(0x12,101) /* Get filesystem read-ahead.  */
-#define BLKSECTSET _IO(0x12,102) /* Set max sectors per request.  */
-#define BLKSECTGET _IO(0x12,103) /* Get max sectors per request.  */
-#define BLKSSZGET  _IO(0x12,104) /* Get block device sector size.  */
+#define BLKROSET   _IO(0x12,93)	/* set device read-only (0 = read-write) */
+#define BLKROGET   _IO(0x12,94)	/* get read-only status (0 = read_write) */
+#define BLKRRPART  _IO(0x12,95)	/* re-read partition table */
+#define BLKGETSIZE _IO(0x12,96)	/* return device size /512 (long *arg) */
+#define BLKFLSBUF  _IO(0x12,97)	/* flush buffer cache */
+#define BLKRASET   _IO(0x12,98)	/* set read ahead for block device */
+#define BLKRAGET   _IO(0x12,99)	/* get current read ahead setting */
+#define BLKFRASET  _IO(0x12,100)/* set filesystem (mm/filemap.c) read-ahead */
+#define BLKFRAGET  _IO(0x12,101)/* get filesystem (mm/filemap.c) read-ahead */
+#define BLKSECTSET _IO(0x12,102)/* set max sectors per request (ll_rw_blk.c) */
+#define BLKSECTGET _IO(0x12,103)/* get max sectors per request (ll_rw_blk.c) */
+#define BLKSSZGET  _IO(0x12,104)/* get block device sector size */
 #define BLKBSZGET  _IOR(0x12,112,size_t)
 #define BLKBSZSET  _IOW(0x12,113,size_t)
-#define BLKGETSIZE64 _IOR(0x12,114,size_t) /* return device size.  */
+#define BLKGETSIZE64 _IOR(0x12,114,size_t)	/* return device size in bytes (u64 *arg) */
 
 
 /* Possible value for FLAGS parameter of `umount2'.  */
